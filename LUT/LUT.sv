@@ -1,28 +1,31 @@
 // Lookup table
 module LUT (
-  input        [3:0] key,
+  input        [4:0] key,
   
   output logic [7:0] LUTaddr // Target address
   );
 
   always_comb begin
     case(key)
-      // every mem byte has index: MSB 7 6 5 4 3 2 1 0 LSB
-      0: LUTaddr = 0; // mem[0][7:7] MSW Start; F1
-      1: LUTaddr = 1; // mem[0][6:6] F0
-      2: LUTaddr = 5; // mem[0][2:2] b11
-      3: LUTaddr = 8; // mem[1][7:7] LSW Start
-      4: LUTaddr = 240; // mem[30][7:7] MSW Start
-      5: LUTaddr = 247; // mem[30][0:0] p8
-      6: LUTaddr = 248; // mem[31][7:7] LSW Start
-      7: LUTaddr = 251; // mem[31][4:4] p4
-      8: LUTaddr = 253; // mem[31][2:2] p2
-      9: LUTaddr = 254; // mem[31][1:1] p1
-      10: LUTaddr = 255; // mem[31][0:0] p0
-      11: LUTaddr = 256; // mem[32][7:7] 5-bit pattern
-      12: LUTaddr = 264; // mem[33][7:7]
-      13: LUTaddr = 272; // mem[34][7:7]
-      14: LUTaddr = 280; // mem[35][7:7]
+      0:  LUTaddr = 8'b00100000 // 32
+      1:  LUTaddr = 8'b00100001 // 33
+      2:  LUTaddr = 8'b00100010 // 34
+      3:  LUTaddr = 8'b00100011 // 35
+      4:  LUTaddr = 8'b00111100 // 60
+      5:  LUTaddr = 8'b01000000 // 64
+      6:  LUTaddr = 8'b01011011 // 91
+      7:  LUTaddr = 8'b01101101 // 109
+      8:  LUTaddr = 8'b10000000 // 128
+      9:  LUTaddr = 8'b10001110 // 142
+      10: LUTaddr = 8'b10101000 // 168
+      11: LUTaddr = 8'b10101010 // 170
+      12: LUTaddr = 8'b11001000 // 200
+      13: LUTaddr = 8'b11001100 // 204
+      14: LUTaddr = 8'b11100000 // 224
+      15: LUTaddr = 8'b11101000 // 232
+      16: LUTaddr = 8'b11110000 // 240
+      17: LUTaddr = 8'b11111110 // 254
+
       default: LUTaddr = 0;
     endcase
   end
