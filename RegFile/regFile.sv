@@ -25,7 +25,7 @@ module regFile #(parameter pw = 4)(
 	// Sequential write
 	always_ff @(posedge clk) begin
 		// LUT
-		if (LUTsignal) begin
+		if (LUTSet) begin
 			registers[0] <= LUTaddr;
 		end
 		// Writeback to accumulator
