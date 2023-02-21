@@ -5,7 +5,7 @@ module CtrlDecoder (
 	output logic 	regWrite,	// Write enable signal, write to R0
 						regSet,		// Signal for write to general registers
 //						reset,		// 
-						LUT,			// LUT signal to regFile
+						LUTSet,			// LUT signal to regFile
 						
 //						memRead,   // Read from Data Memory
 						memWrite,  // Write to Data Memory
@@ -33,7 +33,7 @@ module CtrlDecoder (
 		// defaults
 		regWrite = 'b0;
 		regSet = 'b0;
-		LUT = 'b0;	// EXTRA
+		LUTSet = 'b0;	// EXTRA
 		memWrite = 'b0;
 		ctrlBranch = 'b0;
 		ALUSrc = 'b0;	// EXTRA
@@ -75,7 +75,7 @@ module CtrlDecoder (
 				// LUTA
 				3'b111: begin
 					regWrite = 'b1;
-					LUT = 'b1;
+					LUTSet = 'b1;
 					ALUSrc = 'b1;
 				end
 			endcase
@@ -124,12 +124,12 @@ module CtrlDecoder (
 				// BR
 				4'b1100: begin
 					ctrlBranch = 'b1;
-//					LUT = 'b1;
+//					LUTSet = 'b1;
 				end
 				// J
 				4'b1101: begin
 					ctrlBranch = 'b1;
-//					LUT = 'b1;
+//					LUTSet = 'b1;
 				end
 				// SET
 				4'b1110:
