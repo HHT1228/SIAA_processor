@@ -142,7 +142,12 @@ module alu_tb ();
 		#1000ps
 		$display("ACC = 0, branch flag: %b, 0 expected", branchFlag);
 		
-		//	rOp = 4'b1101;	J does not go through the ALU
+		// J
+		rOp = 4'b1101;
+		accIn = 44;
+		opIn = 27;
+		#1000ps
+		$display("Unconditional jump, branch flag: %b, 1 expected", branchFlag);
 
 		// SET
 		rOp = 4'b1110;
@@ -199,7 +204,7 @@ module alu_tb ();
 		#1000ps
 		$display("00101100 >> 2 = %b, 00001011 expected", out);
 		
-		//	SETI
+		//	SETI and LUTA
 		iOp = 101;
 		immIn = 25;
 		#1000ps

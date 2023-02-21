@@ -105,6 +105,9 @@ always_comb begin
 			// SETI
 			3'b101:
 				rslt = imm;
+			// LUTA
+			3'b111:
+				rslt = imm;
 		default:
 			rslt = 'b0;
 		endcase
