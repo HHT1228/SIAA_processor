@@ -70,7 +70,9 @@ always_comb begin
 					branch = 1;
 				else
 					branch = 0;
-			// J does not go through the ALU
+			// J
+			4'b1101:
+				branch = 1;
 			// SET
 			4'b1110:
 				rslt = acc;

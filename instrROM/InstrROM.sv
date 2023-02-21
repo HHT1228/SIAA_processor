@@ -4,7 +4,7 @@ module InstrRom #(parameter D=8)(
 
   logic[8:0] memory[2**D];
   initial							    // load the program
-	 $readmemb("mach_code.txt",memory);
+	  $readmemb("mach_code.txt",memory);
 
   always_comb  readData = memory[addr];
 

@@ -6,7 +6,6 @@ module regFile #(parameter pw = 4)(
 			regWrite,	// Write enable signal
 			regSet,		// Signal for write to general registers
 			reset,
-			LUT,
 	
 	input[7:0]	writeData,	// Data to write to accumulator
 					LUTaddr,		// Target address from LUT
@@ -31,10 +30,6 @@ module regFile #(parameter pw = 4)(
 		// Handle set instruction within register files
 		else if(regSet) begin
 			registers[opRegAddr] <= registers[0];
-		end
-		// Load r0 with target address from LUT
-		else if(LUT) begin
-			registers[0] <= LUTaddr;
 		end
 		// Clear registers for reset signal
 		else if(reset) begin

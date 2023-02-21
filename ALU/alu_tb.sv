@@ -17,6 +17,7 @@ module alu_tb ();
 	alu alu_mod(.acc(accIn), .opReg(opIn), .imm(immIn), .typeCode(typeCode), 
 			.rOp(rOp), .iOp(iOp), .scIn(scIn), .rslt(out),
 			.scOut(scOut), .zero(zero), .branch(branchFlag));
+	// TODO: add J test
 	
 	initial begin
 		// R-type instructions
