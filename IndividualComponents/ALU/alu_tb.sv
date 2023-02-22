@@ -34,11 +34,11 @@ module alu_tb ();
 		
 		// SUB
 		rOp = 4'b0001;		
-		accIn = 44;
-		opIn = 45;
+		accIn = 45;
+		opIn = 44;
 		scIn = 0;
 		#1000ps
-		$display("44 - 45 = %d, -1 expected", out);
+		$display("45 - 44 = %d, 1 expected", out);
 		
 		//	AND
 		rOp = 4'b0010;
@@ -177,11 +177,11 @@ module alu_tb ();
 		
 		// SUBI
 		iOp = 001;		
-		accIn = 30;	//8'b0011_1110
+		accIn = 32;	//8'b0010_0000
 		immIn = 31;	//5'b11111
 		scIn = 0;
 		#1000ps
-		$display("30 - 31 = %d, -1 expected", out);
+		$display("32 - 31 = %d, 1 expected", out);
 		
 		// ANDI
 		iOp = 010;
