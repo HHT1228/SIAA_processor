@@ -6,7 +6,7 @@
 - `dataMem.sv`: Data Memory module file
 - `InstrROM.sv`: Instruction Memory module file
 - `LUT.sv`: Lookup Table module file
-- `mach_code.txt`: machine code instructions
+- `mach_code.txt`: Dummy machine code instructions for compilation
 - `MUX.sv`: MUX module file
 - `PC.sv`: Program Counter module file
 - `PC_tb.sv`: Program Counter testbench file
