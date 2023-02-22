@@ -168,7 +168,7 @@ module alu_tb ();
 		typeCode = 1;
 		
 		// ADDI
-		iOp = 000;		
+		iOp = 3'b000;		
 		accIn = 44;	//8'b0010_1100
 		immIn = 31;	//5'b11111
 		scIn = 0;
@@ -176,7 +176,7 @@ module alu_tb ();
 		$display("44 + 31 = %d, 75 expected", out);
 		
 		// SUBI
-		iOp = 001;		
+		iOp = 3'b001;		
 		accIn = 32;	//8'b0010_0000
 		immIn = 31;	//5'b11111
 		scIn = 0;
@@ -184,28 +184,28 @@ module alu_tb ();
 		$display("32 - 31 = %d, 1 expected", out);
 		
 		// ANDI
-		iOp = 010;
+		iOp = 3'b010;
 		accIn = 8'b00101100;
 		immIn =    5'b01101;
 		#1000ps
 		$display("00101100 AND {000, 01101} = %b, 00001100 expected", out);
 		
 		//	SLL
-		iOp = 011;
+		iOp = 3'b011;
 		accIn = 8'b00101100;
 		immIn =  2;
 		#1000ps
 		$display("00101100 << 2 = %b, 10110000 expected", out);
 		
 		// SRL
-		iOp = 100;
+		iOp = 3'b100;
 		accIn = 8'b00101100;
 		immIn =  2;
 		#1000ps
 		$display("00101100 >> 2 = %b, 00001011 expected", out);
 		
 		//	SETI and LUTA
-		iOp = 101;
+		iOp = 3'b101;
 		immIn = 25;
 		#1000ps
 		$display("Set immediate input to acc, output: %d, 25 expected", out);
