@@ -79,7 +79,7 @@ with open('mach_code.txt', 'w') as outFile:
         regOrImm = instr[1]
         
         # Code translation and write
-        # IMPORTANT: Each machine code has follows the structure:
+        # IMPORTANT: Each machine code follows the structure:
             # type (rType or iType) + op (e.g. opADD, opXOR, op SLL) + regDict[regOrImm] + '\n"
         
         # Translate ADD instruction
