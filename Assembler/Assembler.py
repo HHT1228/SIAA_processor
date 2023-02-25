@@ -94,12 +94,12 @@ with open('mach_code.txt', 'w') as outFile:
         
         # Translate ADD instruction
         if(op == 'add'):
-            machineCode = rType + opADD + regDict[regOrImm] +  '\n'
+            machineCode = rType + regDict[regOrImm] + opADD +  '\n'
             outFile.write(machineCode)
             
         # Translate SUB instruction
-        elif(op == 'sub') or (op == 'SUB'):
-            machineCode = rType + opSUB + regDict[regOrImm] +  '\n'
+        elif(op == 'sub'):
+            machineCode = rType + regDict[regOrImm] + opSUB +  '\n'
             outFile.write(machineCode)
             
         # TODO: Implement translations for the other instructions
