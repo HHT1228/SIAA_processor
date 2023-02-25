@@ -1,7 +1,4 @@
 # Assembly File Format
-- Always use `tab`
-- No comments in a line with instruction / branch definition
-- No instruction in the line defining a branch
 - Binary number format: 0bxxxx_xxxx
 
 ## Example
