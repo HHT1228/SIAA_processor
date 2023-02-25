@@ -28,29 +28,29 @@ opLUTA  = '111'
 
 # Register dictionary
 regDict = {
-    'R0': '0000',
-    'R1': '0001',
-    'R2': '0010',
-    'R3': '0011',
-    'R4': '0100',
-    'R5': '0101',
-    'R6': '0110',
-    'R7': '0111',
-    'R8': '1000',
-    'R9': '1001',
-    'R10': '1010',
-    'R11': '1011',
-    'R12': '1100',
-    'R13': '1101',
-    'R14': '1110',
-    'R15': '1111',
+    'r0': '0000',
+    'r1': '0001',
+    'r2': '0010',
+    'r3': '0011',
+    'r4': '0100',
+    'r5': '0101',
+    'r6': '0110',
+    'r7': '0111',
+    'r8': '1000',
+    'r9': '1001',
+    'r10': '1010',
+    'r11': '1011',
+    'r12': '1100',
+    'r13': '1101',
+    'r14': '1110',
+    'r15': '1111',
 }
 
 # TODO?: Clean-up immediates (i.e. convert 0b0001_1110 into 00001110)
 
 # Type code definition
-rType = 1
-iType= 0
+rType = '0'
+iType= '1'
 
 # Read the entire assembly code file as input
 with open('assembly.txt', 'r') as inFile:
@@ -74,16 +74,16 @@ with open('mach_code.txt', 'w') as outFile:
             continue
         
         # print(instr)    # DELTE: for debug
-        op = instr[0]
+        op = instr[0].lower()
         # print(op)
-        regOrImm = instr[1]
+        regOrImm = instr[1].lower()
         
         # Code translation and write
         # IMPORTANT: Each machine code follows the structure:
             # type (rType or iType) + op (e.g. opADD, opXOR, op SLL) + regDict[regOrImm] + '\n"
         
         # Translate ADD instruction
-        if(op == 'add') or (op == 'ADD'):
+        if(op == 'add'):
             machineCode = rType + opADD + regDict[regOrImm] +  '\n'
             outFile.write(machineCode)
             
