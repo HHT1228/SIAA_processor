@@ -1,0 +1,4 @@
+- Always use `tab`
+- No `tab` before a line
+- No empty lines
+- No comments
