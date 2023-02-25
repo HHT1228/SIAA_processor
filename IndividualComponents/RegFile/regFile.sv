@@ -9,7 +9,7 @@ module regFile #(parameter pw = 4)(
 			// LUTSet,         // Signal for LUT
 	
 	input[7:0]	writeData,	// Data to write to accumulator
-					LUTaddr,		// Target address from LUT
+//					LUTaddr,		// Target address from LUT
 	input[pw:0]	opRegAddr,	// Operand register pointer
 	
 	output logic[7:0] accData,		// Data read from r0
