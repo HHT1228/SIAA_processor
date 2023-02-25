@@ -1,4 +1,6 @@
 seti  0
 LOOP:
   seti  0
+LOOP2:
+  seti  1
   halt
