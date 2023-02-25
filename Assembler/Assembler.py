@@ -50,7 +50,7 @@ regDict = {
 
 # Type code definition
 rType = '0'
-iType= '1'
+iType = '1'
 
 # Read the entire assembly code file as input
 with open('assembly.txt', 'r') as inFile:
@@ -60,6 +60,7 @@ with open('assembly.txt', 'r') as inFile:
 with open('mach_code.txt', 'w') as outFile:
     assemblyCode = assemblyCode.split('\n')     # SPlit the assembly code into separate lines
     lineCount = len(assemblyCode)
+    branch_name = None
     
     for i in range(lineCount):
         # print(assemblyCode[i])    # DELETE: for debug
@@ -68,9 +69,18 @@ with open('mach_code.txt', 'w') as outFile:
         instr = assemblyCode[i].split()
          
         # Skip comments and empty lines
-        if (len(instr) == 0) or (len(instr) < 2):
+        if (len(instr) == 0):
             continue
         elif(instr == '\n') or (instr[0] == '#'):
+            continue
+            
+        # Handle HALT and branch definition
+        if instr[0].lower() == 'halt':
+            machineCode = iType + '00000' + opHALT + '\n'
+            outFile.write(machineCode)
+            continue
+        if instr[0][-1] == ':':
+            branch_name = instr[0][:-1]
             continue
         
         # print(instr)    # DELTE: for debug
