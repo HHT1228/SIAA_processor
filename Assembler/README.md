@@ -1,6 +1,5 @@
 # Assembly File Format
 - Always use `tab`
-- No `tab` before a line
 - No comments in a line with instruction / branch definition
 - No instruction in the line defining a branch
 - Binary number format: 0bxxxx_xxxx
