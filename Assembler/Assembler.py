@@ -46,7 +46,16 @@ regDict = {
     'r15': '1111',
 }
 
-# TODO?: Clean-up immediates (i.e. convert 0b0001_1110 into 00001110)
+# Clean-up immediates (i.e. convert 0b0001_1110 into 00001110)
+# Return: 8 bits!
+def cope_with_immediates(imm_str):
+    if len(imm_str) > 2 and imm_str[:2] == '0b': # binary
+        return imm_str[2:6] + imm_str[7:11]
+    else: # decimal
+        num = int(imm_str)
+        num_binary_str = bin(num)[2:] # ex. bin(3) = '0b11'
+        num_binary_str = '0' * (8 - len(num_binary_str)) + num_binary_str
+        return num_binary_str
 
 # Type code definition
 rType = '0'
@@ -69,9 +78,9 @@ with open('mach_code.txt', 'w') as outFile:
         instr = assemblyCode[i].split()
          
         # Skip comments and empty lines
-        if (len(instr) == 0):
+        if len(instr) == 0:
             continue
-        elif(instr == '\n') or (instr[0] == '#'):
+        elif instr == '\n' or instr[0] == '#':
             continue
             
         # Handle HALT and branch definition
@@ -93,13 +102,19 @@ with open('mach_code.txt', 'w') as outFile:
             # type (rType or iType) + op (e.g. opADD, opXOR, op SLL) + regDict[regOrImm] + '\n"
         
         # Translate ADD instruction
-        if(op == 'add'):
+        if op == 'add':
             machineCode = rType + regDict[regOrImm] + opADD +  '\n'
             outFile.write(machineCode)
             
         # Translate SUB instruction
-        elif(op == 'sub'):
+        elif op == 'sub':
             machineCode = rType + regDict[regOrImm] + opSUB +  '\n'
+            outFile.write(machineCode)
+        
+        # Translate ADDI instruction
+        elif op == 'addi':
+            imm = cope_with_immediates(regOrImm)[3:] # cope_with_immediates() returns 8 bits
+            machineCode = rType + imm + opADDI + '\n'
             outFile.write(machineCode)
             
         # TODO: Implement translations for the other instructions
