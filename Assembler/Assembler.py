@@ -89,7 +89,7 @@ with open('mach_code.txt', 'w') as outFile:
             
         # Translate SUB instruction
         elif(op == 'sub') or (op == 'SUB'):
-            machineCode = iType + opSUB + regDict[regOrImm] +  '\n'
+            machineCode = rType + opSUB + regDict[regOrImm] +  '\n'
             outFile.write(machineCode)
             
         # TODO: Implement translations for the other instructions
