@@ -93,7 +93,7 @@ with open('mach_code.txt', 'w') as outFile:
             outFile.write(machineCode)
             
         # TODO: Implement translations for the other instructions
-        
+
 
 # Close files
 inFile.close()
