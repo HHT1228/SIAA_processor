@@ -151,6 +151,12 @@ with open('mach_code.txt', 'w') as outFile:
             imm = cope_with_immediates(regOrImm)[3:] # cope_with_immediates() returns 8 bits
             machineCode = iType + imm + opANDI + '\n'
             outFile.write(machineCode)
+        
+        # Translate SLR instruction
+        elif op == 'slr':
+            machineCode = rType + regDict(regOrImm) + opSLR + '\n'
+            outFile.write(machineCode)
+
 
         # TODO: Implement translations for the other instructions
 
