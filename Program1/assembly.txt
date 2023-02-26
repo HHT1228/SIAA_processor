@@ -1,0 +1,349 @@
+seti	0	# R0 = 0
+set	R1	# R1 = 0
+LOOP:
+	# Read data from data mem
+lw	R1	# R0 = mem[i]
+	set	R2	# R2 = mem[i] = LSW
+	seti	1	# R0 = 1
+	add 	R1	# R0 = i + 1
+	lw 	R1	# R1 = mem[i + 1]
+	set 	R3	# R3 = mem[i + 1] = MSW
+
+# Constant set
+	seti 0b0000_0001		# R0 = 1
+	set	R15	# R15 = 1
+	seti	15	# R0 = 15
+	set	R9	# R9 = 15
+
+	# Loop condition modify
+	seti	1	# R0 = 1
+	set	R6	# R6 = 1
+	la	R1	# R0 = R1
+	add	R6	# R0 = R0 + R6
+	set	R1	# R1 = R0	(equivalent to R1 += 1)
+	
+	# Calculate p8 MSW part (11, 10, 9)
+	sub	R0	# R0 = 0 (clear)
+	set	R8	# R8 = 0; p8 = 0
+	la	R3	# R0 = R3 = MSW
+	and	R15	# R0 = b9
+	xor	R8	# R0 = R0 ^ r8 (b9 ^ R8)
+	set	R8	# R8 = R0
+
+	la	R3	# R0 = R3 = MSW
+	srl	1	# R0 = R0 >> 1
+	and	R15	# R0 = b10
+	xor	R8	# R0 = R0 ^ r8 (b10 ^ R8)
+	set	R8	# R8 = R0
+
+	la	R3	# R0 = R3 = MSW
+	srl	2	# R0 = R0 >> 2
+	and	R15	# R0 = b11
+	xor	R8	# R0 = R0 ^ r8 (b11 ^ R8)
+	set	R8	# R8 = R0
+
+	# Calculate p8 LSW part (8, 7, 6, 5)
+	sub	R0	# R0 = 0 (clear)
+	la	R2	# R0 = R2 = LSW
+	srl	4	# R0 = R0 >> 4
+	and	R15	# R0 = b5
+	xor	R8	# R0 = R0 ^ r8 (b5 ^ R8)
+	set	R8	# R8 = R0
+	
+	la	R2	# R0 = R2 = LSW
+	srl	5	# R0 = R0 >> 5
+	and	R15	# R0 = b6
+	xor	R8	# R0 = R0 ^ r8 (b6 ^ R8)
+	set	R8	# R8 = R0
+	
+	la	R2	# R0 = R2 = LSW
+	srl	6	# R0 = R0 >> 6
+	and	R15	# R0 = b7
+	xor	R8	# R0 = R0 ^ r8 (b7 ^ R8)
+	set	R8	# R8 = R0
+
+	la	R2	# R0 = R2 = LSW
+	srl	7	# R0 = R0 >> 7
+	and	R15	# R0 = b8
+	xor	R8	# R0 = R0 ^ r8 (b8 ^ R8)
+	set	R8	# R8 = R0
+
+	# Calculate p4 MSW part (11, 10, 9)
+	sub	R0	# R0 = 0 (clear)
+	set	R4	# R4 = 0; p4 = 0
+	la	R3	# R0 = R3 = MSW
+	and	R15	# R0 = b9
+	xor	R4	# R0 = R0 ^ R4 (b9 ^ Rr)
+	set	R4	# R4 = R0
+
+	la	R3	# R0 = R3 = MSW
+	srl	1	# R0 = R0 >> 1
+	and	R15	# R0 = b10
+	xor	R4	# R0 = R0 ^ R4 (b10 ^ R4)
+	set	R4	# R4 = R0
+
+	la	R3	# R0 = R3 = MSW
+	srl	2	# R0 = R0 >> 2
+	and	R15	# R0 = b11
+	xor	R4	# R0 = R0 ^ R4 (b11 ^ R4)
+	set	R4	# R4 = R0
+
+	# Calculate p4 LSW part (8, 4, 3, 2)
+	sub	R0	# R0 = 0 (clear)
+	la	R2	# R0 = R2 = LSW
+	srl	1	# R0 = R0 >> 1
+	and	R15	# R0 = b2
+	xor	R4	# R0 = R0 ^ R4 (b2 ^ R4)
+	set	R4	# R4 = R0
+	
+	la	R2	# R0 = R2 = LSW
+	srl	2	# R0 = R0 >> 2
+	and	R15	# R0 = b3
+	xor	R4	# R0 = R0 ^ R4 (b3 ^ R4)
+	set	R4	# R4 = R0
+	
+	la	R2	# R0 = R2 = LSW
+	srl	3	# R0 = R0 >> 3
+	and	R15	# R0 = b4
+	xor	R4	# R0 = R0 ^ R4 (b4 ^ R4)
+	set	R4	# R4 = R0
+
+	la	R2	# R0 = R2 = LSW
+	srl	7	# R0 = R0 >> 7
+	and	R15	# R0 = b8
+	xor	R4	# R0 = R0 ^ R4 (b8 ^ R4)
+	set	R4	# R8 = R0
+
+	# Calculate p2 MSW part (11, 10)
+	sub	R0	# R0 = 0 (clear)
+	set	R12	# R12 = 0; R12 = 0
+	la	R3	# R0 = R3 = MSW
+	srl 	1	# R0 = R0 >> 1
+	and	R15	# R0 = b10
+	xor	R12 	# R0 = R0 ^ R12 (b10 ^ R12)
+	set	R12	# R12 = R0
+
+	la	R3	# R0 = R3 = MSW
+	srl	2	# R0 = R0 >> 2
+	and	R15	# R0 = b11
+	xor	R12	# R0 = R0 ^ R12 (b11 ^ R12)
+	set	R12	# R12 = R0
+
+	# Calculate p2 LSW part (7, 6, 4, 3, 1)
+	sub	R0	# R0 = 0 (clear)
+	la	R2	# R0 = R2 = LSW
+	and	R15	# R0 = b1
+	xor	R12	# R0 = R0 ^ R12 (b1 ^ R12)
+	set	R12	# R12 = R0
+	
+	la	R2	# R0 = R2 = LSW
+	srl	2	# R0 = R0 >> 2
+	and	R15	# R0 = b3
+	xor	R12	# R0 = R0 ^ R12 (b3 ^ R12)
+	set	R12	# R12 = R0
+	
+	la	R2	# R0 = R2 = LSW
+	srl	3	# R0 = R0 >> 3
+	and	R15	# R0 = b4
+	xor	R12	# R0 = R0 ^ R12 (b4 ^ R12)
+	set	R12	# R12 = R0
+
+	la	R2	# R0 = R2 = LSW
+	srl	5	# R0 = R0 >> 5
+	and	R15	# R0 = b6
+	xor	R12	# R0 = R0 ^ R12 (b6 ^ R12)
+	set	R12	# R12 = R0
+	
+la	R2	# R0 = R2 = LSW
+	srl	6	# R0 = R0 >> 6
+	and	R15	# R0 = b7
+	xor	R12	# R0 = R0 ^ R12 (b7 ^ R12)
+	set	R12	# R12 = R0
+
+	# Calculate p1 MSW part (11, 9)
+	sub	R0	# R0 = 0 (clear)
+	set	R11	# R12 = 0; R12 = 0
+	la	R3	# R0 = R3 = MSW
+	and	R15	# R0 = b9
+	xor	R11	# R0 = R0 ^ R11 (b9 ^ R11)
+	set	R11	# R11 = R0
+
+	la	R3	# R0 = R3 = MSW
+	srl	1	# R0 = R0 >> 2
+	and	R15	# R0 = b11
+	xor	R11	# R0 = R0 ^ R11 (b11 ^ R11)
+	set	R11	# R11 = R0
+
+	# Calculate p1 LSW part (7, 5, 4, 2, 1)
+	sub	R0	# R0 = 0 (clear)
+	la	R2	# R0 = R2 = LSW
+	and	R15	# R0 = b1
+	xor	R11	# R0 = R0 ^ R11 (b1 ^ R11)
+	set	R11	# R11 = R0
+	
+	la	R2	# R0 = R2 = LSW
+	srl	1	# R0 = R0 >> 1
+	and	R15	# R0 = b2
+	xor	R11	# R0 = R0 ^ R11 (b2 ^ R11)
+	set	R11	# R11 = R0
+	
+	la	R2	# R0 = R2 = LSW
+	srl	3	# R0 = R0 >> 3
+	and	R15	# R0 = b4
+	xor	R11	# R0 = R0 ^ R11 (b4 ^ R11)
+	set	R11	# R11 = R0
+
+	la	R2	# R0 = R2 = LSW
+	srl	4	# R0 = R0 >> 4
+	and	R15	# R0 = b5
+	xor	R11	# R0 = R0 ^ R11 (b5 ^ R11)
+	set	R11	# R11 = R0
+	
+la	R2	# R0 = R2 = LSW
+	srl	6	# R0 = R0 >> 6
+	and	R15	# R0 = b7
+	xor	R11	# R0 = R0 ^ R11 (b7 ^ R11)
+	set	R11	# R11 = R0
+	
+	# Calculate p0 MSW part (11, 10, 9)
+	sub	R0	# R0 = 0 (clear)
+	set	R10	# R10 = 0; p0 = 0
+	la	R3	# R0 = R3 = MSW
+	and	R15	# R0 = b9
+	xor	R10	# R0 = R0 ^ R10 (b9 ^ R10)
+	set	R8	# R10 = R0
+
+	la	R3	# R0 = R3 = MSW
+	srl	1	# R0 = R0 >> 1
+	and	R15	# R0 = b10
+	xor	R10	# R0 = R0 ^ R10 (b10 ^ R10)
+	set	R10	# R10 = R0
+
+	la	R3	# R0 = R3 = MSW
+	srl	2	# R0 = R0 >> 2
+	and	R15	# R0 = b11
+	xor	R10	# R0 = R0 ^ R10 (b11 ^ R10)
+	set	R10	# R10 = R0
+
+	# Calculate p0 LSW part (8, 7, 6, 5, 4, 3, 2, 1)
+	sub	R0	# R0 = 0 (clear)
+	la	R2	# R0 = R2 = LSW
+	and	R15	# R0 = b1
+	xor	R10	# R0 = R0 ^ R10 (b1 ^ R10)
+	set	R10	# R10 = R0
+	
+	la	R2	# R0 = R2 = LSW
+	srl	1	# R0 = R0 >> 1
+	and	R15	# R0 = b2
+	xor	R10	# R0 = R0 ^ R10 (b2 ^ R10)
+	set	R10	# R10 = R0
+
+	la	R2	# R0 = R2 = LSW
+	srl	2	# R0 = R0 >> 2
+	and	R15	# R0 = b3
+	xor	R10	# R0 = R0 ^ R10 (b3 ^ R10)
+	set	R10	# R10 = R0	
+
+	la	R2	# R0 = R2 = LSW
+	srl	3	# R0 = R0 >> 3
+	and	R15	# R0 = b4
+	xor	R10	# R0 = R0 ^ R10 (b4 ^ R10)
+	set	R10	# R10 = R0
+
+	la	R2	# R0 = R2 = LSW
+	srl	4	# R0 = R0 >> 4
+	and	R15	# R0 = b5
+	xor	R10	# R0 = R0 ^ R10 (b5 ^ R10)
+	set	R10	# R10 = R0
+
+	la	R2	# R0 = R2 = LSW
+	srl	5	# R0 = R0 >> 5
+	and	R15	# R0 = b6
+	xor	R10	# R0 = R0 ^ R10 (b6 ^ R10)
+	set	R10	# R10 = R0
+
+la	R2	# R0 = R2 = LSW
+	srl	6	# R0 = R0 >> 6
+	and	R15	# R0 = b7
+	xor	R10	# R0 = R0 ^ R10 (b7 ^ R10)
+	set	R10	# R10 = R0
+
+la	R2	# R0 = R2 = LSW
+	srl	7	# R0 = R0 >> 7
+	and	R15	# R0 = b8
+	xor	R10	# R0 = R0 ^ R10 (b8 ^ R10)
+	set	R10	# R10 = R0
+	
+	# Calculate p0 partiy part
+	la	R10	# R0 = R10 (p0)
+	xor	R8	# R0 = R0 ^ R8 (p8)
+	xor 	R4	# R0 = R0 ^ R4 (p4)
+	xor 	R12	# R0 = R0 ^ R12 (p2)
+	xor	R11	# R0 = R0 ^ R11 (p1)
+	set	R10	# R10 = R0 (p0)
+	
+	
+	# New MSW address
+	sub	R0	# R0 = 0 (clear)
+	seti	31	# R0 = 31
+	add	R1	# R0 = R0 + i (loop counter)
+	set	R14	# R14 = R0 (31 + i, the new MSW destination address)
+	
+	# New MSW
+	seti	0b1111_0000	# R0 = 0b1111_0000 (temporary mask)
+	set	R5	# R5 = R0 = 0b1111_0000
+sub	R0	# R0 = 0 (clear)
+	la	R3	# R0 = R3 (MSW)
+	sll	5	# R0 << 5
+	set	R6	# R6 = R0
+	la	R2	# R0 = R2 (LSW)
+	and	R5	# R0 = R0 & R5 (R0 & 0b1111_0000)
+	srl	3	# R0 = R0 >> 3
+	or	R6	# R0 = R0 | R6; (MSW << 5) | ((LSW & 0b1111_0000) >> 3))
+	or	R8	# R0 = R0 | R8 (R0 | p8)
+	sw	R14	# datamem[31 + i] = R0
+	
+	# New LSW address
+	sub	R0	# R0 = 0 (clear)
+	seti	30	# R0 = 30
+	add	R1	# R0 = R0 + i (loop counter)
+	set	R13	# R13 = R0 (30 + i, the new LSW destination address)
+	
+	# New LSW
+	sub	R0	# R0 = 0 (clear)
+	seti	0b0000_1110	# R0 = 0b0000_1110 (temporary mask)
+	set	R5	# R5 = R0 = 0b0000_1110
+	la	R2	# R0 = R2 (LSW)
+	and	R5	# R0 = R0 & R5 (R0 & 0b1111_0000)
+	sll	4	# R0 = R0 << 4
+set	R6	# R6 = R0
+
+la	R4	# R0 = R4 (p4)
+	sll	4	# R0 = R0 << 4
+	or	R6	# R0 = R0 | R6
+	set	R6	# R6 = R0	(newLSW)
+
+	la	R2	# R0 = R2 (LSW)
+	and	R15	# R0 = R0 & R15 (R0 & 0b0000_0001)
+	sll	7	# R0 = R0 << 7
+	set	R7	# R7 = R0
+
+	la	R12	# R0 = R12 (p2)
+	sll	2	# R0 = R0 << 2 (p2 << 2)
+	set	R12	# R12 = R0 (p2 after shift)
+	la	R11	# R0 = R11 (p1)
+	sll	1	# R0 = R0 << 1 (p1 << 1)
+	set	R11	# R11 = R0 (p1 after shift)
+	
+	la	R6	# R0 = R6
+	or	R7	# R0 = R0 | R7
+or	R12	# R0 = R0 | R12 (newLSW | (p2 << 2))
+or	R11	# R0 = R0 | R11	(newLSW | (p1 << 1))
+or	R10	# R0	= R0 | R10 (newLSW | p0)
+sw	R13	# datamem[30 + i] = R0
+
+# Loop condition check
+la	R1	# R0 = R1
+slt	R9	# R0 = (R0 < 15)
+# dbr	LOOP	# Iterate from the start (LOOP flag)
+halt		# Otherwise, terminate the program
