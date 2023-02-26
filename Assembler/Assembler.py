@@ -46,7 +46,7 @@ regDict = {
     'r15': '1111',
 }
 
-# Clean-up immediates (i.e. convert 0b0001_1110 into 00001110)
+# Clean-up immediates (i.e. convert 0b0001_1110 into 00011110)
 # Return: 8 bits!
 def cope_with_immediates(imm_str):
     if len(imm_str) > 2 and imm_str[:2] == '0b': # binary
