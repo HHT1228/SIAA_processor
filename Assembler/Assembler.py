@@ -69,7 +69,7 @@ with open('assembly.txt', 'r') as inFile:
 with open('mach_code.txt', 'w') as outFile:
     assemblyCode = assemblyCode.split('\n')     # SPlit the assembly code into separate lines
     lineCount = len(assemblyCode)
-    branch_name = None
+    # branch_name = None
     
     for i in range(lineCount):
         # print(assemblyCode[i])    # DELETE: for debug
@@ -89,17 +89,20 @@ with open('mach_code.txt', 'w') as outFile:
             outFile.write(machineCode)
             continue
         if instr[0][-1] == ':':
-            branch_name = instr[0][:-1]
+            # branch_name = instr[0][:-1]
             continue
+        # if branch_name != None:
+            # print(i, branch_name, instr)
+            # branch_name = None
         
-        # print(instr)    # DELTE: for debug
+        # print(instr)    # DELETE: for debug
         op = instr[0].lower()
         # print(op)
         regOrImm = instr[1].lower()
         
         # Code translation and write
         # IMPORTANT: Each machine code follows the structure:
-            # type (rType or iType) + op (e.g. opADD, opXOR, op SLL) + regDict[regOrImm] + '\n"
+            # type (rType or iType) + regDict[regOrImm] + op (e.g. opADD, opXOR, op SLL) + '\n"
         
         # Translate ADD instruction
         if op == 'add':
