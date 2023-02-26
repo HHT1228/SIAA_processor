@@ -120,6 +120,38 @@ with open('mach_code.txt', 'w') as outFile:
             machineCode = iType + imm + opADDI + '\n'
             outFile.write(machineCode)
             
+        # Translate SUBI instruction
+        elif op == 'subi':
+            imm = cope_with_immediates(regOrImm)[3:] # cope_with_immediates() returns 8 bits
+            machineCode = iType + imm + opSUBI + '\n'
+            outFile.write(machineCode)
+        
+        # Translate AND instruction
+        elif op == 'and':
+            machineCode = rType + regDict[regOrImm] + opAND + '\n'
+            outFile.write(machineCode)
+        
+        # Translate OR instruction
+        elif op == 'or':
+            machineCode = rType + regDict[regOrImm] + opOR + '\n'
+            outFile.write(machineCode)
+
+        # Translate XOR instruction
+        elif op == 'xor':
+            machineCode = rType + regDict[regOrImm] + opXOR + '\n'
+            outFile.write(machineCode)
+            
+        # Translate RXOR instruction
+        elif op == 'rxor':
+            machineCode = rType + regDict[regOrImm] + opRXOR + '\n'
+            outFile.write(machineCode)
+        
+        # Translate ANDI instruction
+        elif op == 'andi':
+            imm = cope_with_immediates(regOrImm)[3:] # cope_with_immediates() returns 8 bits
+            machineCode = iType + imm + opANDI + '\n'
+            outFile.write(machineCode)
+
         # TODO: Implement translations for the other instructions
 
 
