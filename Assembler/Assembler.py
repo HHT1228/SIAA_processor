@@ -181,13 +181,23 @@ with open('mach_code.txt', 'w') as outFile:
         elif op == 'eq':
             machineCode = rType + regDict(regOrImm) + opEQ + '\n'
             outFile.write(machineCode)
+        
+        # Translate BR instruction
+        elif op == 'br':
+            machineCode = rType + regDict(regOrImm) + opBR + '\n'
+            outFile.write(machineCode)
+        
+        # Translate J instruction
+        elif op == 'j':
+            machineCode = rType + regDict(regOrImm) + opJ + '\n'
+            outFile.write(machineCode)
 
         # Translate SET instruction
         elif op == 'set':
             machineCode = rType + regDict(regOrImm) + opSET + '\n'
             outFile.write(machineCode)
         
-        # Transalte SETI instruction
+        # Translate SETI instruction
         elif op == 'seti':
             imm = cope_with_immediates(regOrImm)[3:] # cope_with_immediates() returns 8 bits
             machineCode = iType + imm + opSETI + '\n'
@@ -205,15 +215,16 @@ with open('mach_code.txt', 'w') as outFile:
             machineCode = iType + imm + opSRL + '\n'
             outFile.write(machineCode)
         
+        # Translate LA instruction
+        elif op == 'la':
+            machineCode = rType + regDict(regOrImm) + opLA + '\n'
+            outFile.write(machineCode)
+        
         # Translate LUTA instruction
         elif op == 'luta':
             imm = cope_with_immediates(regOrImm)[3:] # cope_with_immediates() returns 8 bits
             machineCode = iType + imm + opLUTA + '\n'
             outFile.write(machineCode)
-
-
-
-        # TODO: Implement translations for the other instructions
 
 
 # Close files
