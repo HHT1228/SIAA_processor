@@ -156,6 +156,61 @@ with open('mach_code.txt', 'w') as outFile:
         elif op == 'slr':
             machineCode = rType + regDict(regOrImm) + opSLR + '\n'
             outFile.write(machineCode)
+        
+        # Translate SRR instruction
+        elif op == 'srr':
+            machineCode = rType + regDict(regOrImm) + opSRR + '\n'
+            outFile.write(machineCode)
+
+        # Translate SLT instruction
+        elif op == 'slt':
+            machineCode = rType + regDict(regOrImm) + opSLT + '\n'
+            outFile.write(machineCode)
+        
+        # Translate LW instruction
+        elif op == 'lw':
+            machineCode = rType + regDict(regOrImm) + opLW + '\n'
+            outFile.write(machineCode)
+        
+        # Translate SW instruction
+        elif op == 'sw':
+            machineCode = rType + regDict(regOrImm) + opSW + '\n'
+            outFile.write(machineCode)
+
+        # Translate EQ instruction
+        elif op == 'eq':
+            machineCode = rType + regDict(regOrImm) + opEQ + '\n'
+            outFile.write(machineCode)
+
+        # Translate SET instruction
+        elif op == 'set':
+            machineCode = rType + regDict(regOrImm) + opSET + '\n'
+            outFile.write(machineCode)
+        
+        # Transalte SETI instruction
+        elif op == 'seti':
+            imm = cope_with_immediates(regOrImm)[3:] # cope_with_immediates() returns 8 bits
+            machineCode = iType + imm + opSETI + '\n'
+            outFile.write(machineCode)
+        
+        # Translate SLL instruction
+        elif op == 'sll':
+            imm = cope_with_immediates(regOrImm)[3:] # cope_with_immediates() returns 8 bits
+            machineCode = iType + imm + opSLL + '\n'
+            outFile.write(machineCode)
+
+        # Translate SRL instruction
+        elif op == 'srl':
+            imm = cope_with_immediates(regOrImm)[3:] # cope_with_immediates() returns 8 bits
+            machineCode = iType + imm + opSRL + '\n'
+            outFile.write(machineCode)
+        
+        # Translate LUTA instruction
+        elif op == 'luta':
+            imm = cope_with_immediates(regOrImm)[3:] # cope_with_immediates() returns 8 bits
+            machineCode = iType + imm + opLUTA + '\n'
+            outFile.write(machineCode)
+
 
 
         # TODO: Implement translations for the other instructions
