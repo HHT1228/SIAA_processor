@@ -117,7 +117,7 @@ with open('mach_code.txt', 'w') as outFile:
         # Translate ADDI instruction
         elif op == 'addi':
             imm = cope_with_immediates(regOrImm)[3:] # cope_with_immediates() returns 8 bits
-            machineCode = rType + imm + opADDI + '\n'
+            machineCode = iType + imm + opADDI + '\n'
             outFile.write(machineCode)
             
         # TODO: Implement translations for the other instructions
