@@ -345,5 +345,5 @@ sw	R13	# datamem[30 + i] = R0
 # Loop condition check
 la	R1	# R0 = R1
 slt	R9	# R0 = (R0 < 15)
-br	LOOP	# Iterate from the start (LOOP flag)
+# dbr	LOOP	# Iterate from the start (LOOP flag)
 halt		# Otherwise, terminate the program
