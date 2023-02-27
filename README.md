@@ -12,3 +12,5 @@
 - `PC_tb.sv`: Program Counter testbench file
 - `regFile.sv`: Register File module file
 - `TopLevel.sv`: Top Level module file
+- `Assembler`: Assembler program that translates assembly instructions into binary machine codes
+- `Program 1 2 3` Assembly and machine codes for the three programs
