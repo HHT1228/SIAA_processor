@@ -1,420 +1,200 @@
-start:
-  seti 30                             # R0 = 30
-  set  R1                             # R1 = 30 (index)
-  add  R1                             # R0 = 60
-  set  R2                             # R2 = 60 (range of index)
+# R1: loop counter i, index of mem (33, 34, 35)
+# R2: pattern
+# R3: mem_33, mem_35
+# R4: mem_34
+# R5: equal, branch register
+# R6: loop boundary 32
+# R7: store mem[i]
+# R8: store mem[i+1]
+# R9: occNum
+# R10: loop counter j
+# R11: loop boundary for j
+# R12: curr_5bit1
+# R13: curr_5bit2, curr_5bit
+# R14: shifting number
 
-loop_overall_start:
-  la   R1                             # R0 = index
-  slt  R2                             # R0 = R0 < R2 = index < 60
-  set  R3                             # R3 = index < 60
-  seti 1                              # R0 = 1
-  xor  R3                             # R0 = R0 ^ R3 = 1 ^ (index < 60) = index >= 60
-  # br   loop_done                      # if index >= 60, go to loop_done
+luta	0	# R0 = LUT[0] = 32
+set	R6	# R6 = 32 (loop boundary)
+lw	R0	# R0 = mem[32]
+srl	3	# R0 = mem[32] >> 3
+set	R2	# R2 = mem[32] >> 3 (pattern)
 
-  lw   R1                             # R0 = mem[index]
-  set  R3                             # R3 (mem[index])
-  seti 1                              # R0 = 1
-  add  R1                             # R0 = index + 1
-  lw   R0                             # R0 = mem[index + 1]
-  set  R4                             # R4 (mem[index + 1])
-  la   R3                             # R0 = R3 (mem[index])
-  xor  R4                             # R0 = R3 ^ R4 (mem[index] ^ mem[index + 1])
-  set  R5                             # R5 = mem[index] ^ mem[index + 1] (num_for_xor_digits)
-  seti 0                              # R0 = 0
-  set  R6                             # R6 = 0 (ones)
+seti	0	# R0 = 0
+set	R1	# R1 = 0 (loop counter i)
 
-loop_xor_digits_start:
-  seti 0                              # R0 = 0
-  eq   R5                             # R0 = (R0 == R5)
-  # br   loop_overall_p8                # if num_for_xor_digits == 0, go to loop_overall_p8
-  seti 1                              # R0 = 1
-  and  R5                             # R0 = R0 & R5 = 1 & num_for_xor_digits (digit)
-  add  R6                             # R6 = R0 + R6 (ones += digit)
-  la   R5                             # R0 = num_for_xor_digits
-  srl  1                              # R0 = (num_for_xor_digits >> 1)
-  set  R5                             # R5 = num_for_xor_digits = (num_for_xor_digits >> 1)
-  seti  2                              # R0 = 2
-  eq   R6                             # R0 = (R0 == R6) = (ones == 2)
-  # br   loop_xor_digits_start_set_ones # if ones == 2, ones = 0
-  # j    loop_xor_digits_start          # loop
+set	R3	# R3 = mem_33
+set	R4	# R4 = mem_34
 
-loop_xor_digits_start_set_ones:
-  seti 0                              # R0 = 0
-  set  R6                             # R6 = ones = 0
-  # j    loop_xor_digits_start          # loop
+LOOP1_part_a:
+  seti	0	# R0 = 0
+  set	R9	# R9 = 0 (occNum)
+  lw	R1	# R0 = mem[i]
+  set	R7	# R7 = mem[i] (currByte)
+  seti	0	# R0 = 0
+  set	R10	# R10 = 0 (loop counter j)
+  seti	4	# R0 = 4
+  set	R11	# R11 = 4 (loop boundary j)
+	
+LOOP1_J_loop:
+  seti	0b0001_1111	# R0 = 0b0001_1111
+  and	R7	# R0 = R0 & R7 = 0b11111 & currByte = curr_5bit
+  eq	R2	# R0 = R0 == R2 = curr_5bit == pattern = equal
+  set	R5	# R5 = equal
+  add	R9	# R0 = equal + R9 (occNum)
+  set	R9	# R9 = R0 (occNum)
+  la	R5	# R0 = equal
+  add	R3	# R0 += R3 (mem_33)
+  set	R3	# R3 = R0 (mem_33)
+  la	R7	# R0 = currByte
+  srl	1	# R0 = currByte >> 1
+  set	R7	# currByte >>= 1
 
-loop_overall_p8:
-  la   R6                             # R0 = R6 = ones
-  set  R7                             # R7 = ones (one_error_sign)
+  luta	25	# R0 = LUT[25] = address of LOOP1_J_loop
+  set	R5	# R5 = R0
+  seti	1	# R0 = 1
+  add	R10	# R0 = R10 + 1 = new j
+  set	R10	# R10 = R0
+  slt	R11	# R0 = R0 < R11 = new j < 4
+  br	R5	# go to LOOP1_J_loop
 
-  seti 15                             # R0 = 15 = 8’b00001111
-  sll  4                              # R0 = 8’b11110000
-  set  R8                             # R8 = 8’b11110000
-  seti 14                             # R0 = 14 = 8’b00001110
-  add  R8                             # R0 = R0 + R8 = 8’b11111110
-  and  R3                             # R0 = R0 & R3 = mem[index] & 8’b11111110
-  set  R8                             # R8 = mem[index] & 8’b11111110 (mem_index)
-  seti 0                              # R0 = 0
-  and  R4                             # R0 = R0 & R4 = 0 & mem[index + 1]
-  set  R9                             # R9 = mem[index + 1] & 0 (mem_index1)
-  la   R8                             # R0 = R8
-  xor  R9                             # R0 = R8 ^ R9 (mem_index ^ mem_index1)
-  set  R5                             # R5 = mem_index ^ mem_index1 (num_for_xor_digits)
-  seti 0                              # R0 = 0
-  set  R6                             # R6 = 0 (ones)
-    
-loop_xor_digits_p8:
-  seti 0                              # R0 = 0
-  eq   R5                             # R0 = (R0 == R5)
-  # br   loop_overall_p4                # if num_for_xor_digits == 0, go to loop_overall_p4
-  seti 1                              # R0 = 1
-  and  R5                             # R0 = R0 & R5 = 1 & num_for_xor_digits (digit)
-  add  R6                             # R6 = R0 + R6 (ones += digit)
-  la   R5                             # R0 = num_for_xor_digits
-  srl  1                              # R0 = (num_for_xor_digits >> 1)
-  set  R5                             # R5 = num_for_xor_digits = (num_for_xor_digits >> 1)
-  seti  2                              # R0 = 2
-  eq   R6                             # R0 = (R0 == R6) = (ones == 2)
-  # br   loop_xor_digits_p8_set_ones    # if ones == 2, ones = 0
-  # j    loop_xor_digits_p8             # loop
+LOOP1_part_b:
+  seti	0	# R0 = 0
+  slt	R9	# R0 = (R0 < R9) = (occNum > 0)
+  add	R4	# R0 = R4 + (occNum > 0)
+  set	R4	# R4 = R0
 
-loop_xor_digits_p8_set_ones:
-  seti 0                              # R0 = 0
-  set  R6                             # R6 = ones = 0
-  # j    loop_xor_digits_p8             # loop
+  luta	24	# R0 = LUT[24] = address of LOOP1_part_a
+  set	R5	# R5 = R0
+  la	R1	# R0 = R1 (i)
+  addi	1	# R0 = i + 1 = new i
+  set	R1	# R1 = R0 = new i
+  slt	R6	# R0 = R0 < R6 = new i < 32
+  br	R5	# go to LOOP1_part_a
 
-loop_overall_p4:
-  seti 0                              # R0 = 0
-  set  R10                            # R10 = 0 (parity_affected)
-  seti 1                              # R0 = 1
-  and  R3                             # R0 = R0 & R3 = mem[index] & 1 (parity_check)
-  xor  R6                             # R0 = parity_check = R0 ^ R6 = ones ^ parity_check
-  sll  3                              # R0 = (parity_check << 3)
-  add  R10                            # R0 = R0 + R10 = parity_affected + parity_check
-  set  R10                            # R10 = parity_affected = R0
+after_LOOP1:
+  luta	1	# R0 = LUT[1] = 33
+  set	R1	# R1 = 33
+  la	R3	# la mem_33 to R0
+  sw	R1 	# mem[R1] = R0, mem[33] = mem_33
 
-  seti 15                             # R0 = 15 = 8’b00001111
-  sll  4                              # R0 = 8’b11110000
-  and  R3                             # R0 = R0 & R3 = mem[index] & 8’b11110000
-  set  R8                             # R8 = mem[index] & 8’b11110000 (mem_index)
-  seti 14                             # R0 = 14 = 8’b00001110
-  sll  4                              # R0 = 8’b11100000
-  and  R4                             # R0 = R0 & R4 = 8’b11100000 & mem[index + 1]
-  set  R9                             # R9 = mem[index + 1] & 8’b11100000 (mem_index1)
-  la   R8                             # R0 = R8
-  xor  R9                             # R0 = R8 ^ R9 (mem_index ^ mem_index1)
-  set  R5                             # R5 = mem_index ^ mem_index1 (num_for_xor_digits)
-  seti 0                              # R0 = 0
-  set  R6                             # R6 = 0 (ones)
+  luta	2	# R0 = LUT[2] = 34
+  set	R1	# R1 = 34
+  la	R4	# la mem_34 to R0
+  sw	R1 	# mem[R1] = R0, mem[34] = mem_34
 
-loop_xor_digits_p4:
-  seti 0                              # R0 = 0
-  eq   R5                             # R0 = (R0 == R5)
-  # br   loop_overall_p2                # if num_for_xor_digits == 0, go to loop_overall_p2
-  seti 1                              # R0 = 1
-  and  R5                             # R0 = R0 & R5 = 1 & num_for_xor_digits (digit)
-  add  R6                             # R6 = R0 + R6 (ones += digit)
-  la   R5                             # R0 = num_for_xor_digits
-  srl  1                              # R0 = (num_for_xor_digits >> 1)
-  set  R5                             # R5 = num_for_xor_digits = (num_for_xor_digits >> 1)
-  seti  2                              # R0 = 2
-  eq   R6                             # R0 = (R0 == R6) = (ones == 2)
-  # br   loop_xor_digits_p4_set_ones    # if ones == 2, ones = 0
-  # j    loop_xor_digits_p4             # loop
+  seti	0	# R0 = 0
+  set	R1	# loop counter i = 0
+  set	R3	# R3 = mem_35 = 0
 
-loop_xor_digits_p4_set_ones:
-  seti 0                              # R0 = 0
-  set  R6                             # R6 = ones = 0
-  # j    loop_xor_digits_p4             # loop
+LOOP2_part_a:
+  lw	R1	# R0 = mem[i]
+  set	R7	# R7 = mem[i] (mem_i)
 
-loop_overall_p2:
-  seti 16                             # R0 = 16 = 8’b00010000
-  and  R4                             # R0 = R0&R4 = mem[index+1] & 8’b00010000 (parity_check)
-  srl  4                              # R0 = (parity_check >> 4)
-  xor  R6                             # R0 = parity_check = R0 ^ R6 = ones ^ parity_check
-  sll  2                              # R0 = (parity_check << 2)
-  add  R10                            # R0 = R0 + R10 = parity_affected + parity_check
-  set  R10                            # R10 = parity_affected = R0
+  seti	1	# R0 = 1
+  add	R1	# R0 = i + 1
+  lw	R0	# R0 = mem[i+1]
+  set	R8	# R8 = mem[i+1] (mem_i1)
 
-  seti 12                             # R0 = 12 = 8’b00001100
-  sll  4                              # R0 = 8’b11000000
-  set  R8                             # R8 = R0 = 8’b11000000
-  seti 12                             # R0 = 12 = 8’b00001100
-  add  R8                             # R0 = R0 + R8 = 8’b11001100
-  and  R3                             # R0 = R0 & R3 = mem[index] & 8’b11001100
-  set  R8                             # R8 = mem[index] & 8’b11001100 (mem_index)
-  seti 12                             # R0 = 12 = 8’b00001100
-  sll  4                              # R0 = 8’b11000000
-  set  R9                             # R9 = R0 = 8’b11000000
-  seti 8                              # R0 = 8 = 8’b00001000
-  add  R9                             # R0 = R0 + R9 = 8’b11001000
-  and  R4                             # R0 = R0 & R4 = 8’b11001000 & mem[index + 1]
-  set  R9                             # R9 = mem[index + 1] & 8’b11001000 (mem_index1)
-  la   R8                             # R0 = R8
-  xor  R9                             # R0 = R8 ^ R9 (mem_index ^ mem_index1)
-  set  R5                             # R5 = mem_index ^ mem_index1 (num_for_xor_digits)
-  seti 0                              # R0 = 0
-  set  R6                             # R6 = 0 (ones)
+  seti	7	# R0 = 7
+  set	R10	# R10 = 7 (loop counter j)
 
-loop_xor_digits_p2:
-  seti 0                              # R0 = 0
-  eq   R5                             # R0 = (R0 == R5)
-  # br   loop_overall_p1                # if num_for_xor_digits == 0, go to loop_overall_p1
-  seti 1                              # R0 = 1
-  and  R5                             # R0 = R0 & R5 = 1 & num_for_xor_digits (digit)
-  add  R6                             # R6 = R0 + R6 (ones += digit)
-  la   R5                             # R0 = num_for_xor_digits
-  srl  1                              # R0 = (num_for_xor_digits >> 1)
-  set  R5                             # R5 = num_for_xor_digits = (num_for_xor_digits >> 1)
-  seti  2                              # R0 = 2
-  eq   R6                             # R0 = (R0 == R6) = (ones == 2)
-  # br   loop_xor_digits_p2_set_ones    # if ones == 2, ones = 0
-  # j    loop_xor_digits_p2             # loop
+  seti	0	# R0 = 0
+  set	R11	# R11 = 0 (loop boundary j)
 
-loop_xor_digits_p2_set_ones:
-  seti 0                              # R0 = 0
-  set  R6                             # R6 = ones = 0
-  # j    loop_xor_digits_p2             # loop
+LOOP2_J_loopA:
+  luta	28	# R0 = LUT[28] = address of LOOP2_J_loopInByte
+  set	R5	# R5 = R0
+  seti	3	# R0 = 3
+  slt	R10	# R0 = R0 < R10 = 3 < j = j > 3
+  br	R5	# if j > 3, in byte
 
-loop_overall_p1:
-  seti 4                              # R0 = 4 = 8’b00000100
-  and  R4                             # R0 = R0&R4 = mem[index+1] & 8’b00000100 (parity_check)
-  srl  2                              # R0 = (parity_check >> 2)
-  xor  R6                             # R0 = parity_check = R0 ^ R6 = ones ^ parity_check
-  sll  1                              # R0 = (parity_check << 1)
-  add  R10                            # R0 = R0 + R10 = parity_affected + parity_check
-  set  R10                            # R10 = parity_affected = R0
+  luta	30	# R0 = LUT[30] = address of LOOP2_part_b
+  set	R5	# R5 = R0
+  seti	31	# R0 = 31
+  eq	R1	# R0 = (i == 31)
+  br	R5	# no more, jump out of the j loop
 
-  seti 10                             # R0 = 10 = 8’b00001010
-  sll  4                              # R0 = 8’b10100000
-  set  R8                             # R8 = R0 = 8’b10100000
-  seti 10                             # R0 = 10 = 8’b00001010
-  add  R8                             # R0 = R0 + R8 = 8’b10101010
-  and  R3                             # R0 = R0 & R3 = mem[index] & 8’b10101010
-  set  R8                             # R8 = mem[index] & 8’b10101010 (mem_index)
-  seti 10                             # R0 = 10 = 8’b00001010
-  sll  4                              # R0 = 8’b10100000
-  set  R9                             # R9 = R0 = 8’b10100000
-  seti 8                              # R0 = 8 = 8’b00001000
-  add  R9                             # R0 = R0 + R9 = 8’b10101000
-  and  R4                             # R0 = R0 & R4 = 8’b10101000 & mem[index + 1]
-  set  R9                             # R9 = mem[index + 1] & 8’b10101000 (mem_index1)
-  la   R8                             # R0 = R8
-  xor  R9                             # R0 = R8 ^ R9 (mem_index ^ mem_index1)
-  set  R5                             # R5 = mem_index ^ mem_index1 (num_for_xor_digits)
-  seti 0                              # R0 = 0
-  set  R6                             # R6 = 0 (ones)
+  seti	0b0000_1111	# R0 = 0b0000_1111
+  set	R12	# R12 = curr_5bit1 = 0b1111
+  seti	3	# R0 = 3
+  sub	R10	# R0 = 3 - j
+  set	R14	# R14 = shifting number = 3 - j
+  la	R12	# R0 = 0b1111
+  srr	R14	# R0 = 0b1111 >> 3 - j
+  and	R7	# R0 = R0 & mem_i
+  set	R12	# R12 = curr_5bit1 = (0b1111 >> 3 - j) & mem_i
+  seti	1	# R0 = 1
+  add	R14	# R14 = 4 - j
+  la	R12	# R0 = curr_5bit1
+  slr	R14	# R0 = curr_5bit1 << 4 - j
+  set	R12	# R12 = curr_5bit1
 
-loop_xor_digits_p1:
-  seti 0                              # R0 = 0
-  eq   R5                             # R0 = (R0 == R5)
-  # br   loop_overall_prepare           # if num_for_xor_digits == 0, go to loop_overall_prepare
-  seti 1                              # R0 = 1
-  and  R5                             # R0 = R0 & R5 = 1 & num_for_xor_digits (digit)
-  add  R6                             # R6 = R0 + R6 (ones += digit)
-  la   R5                             # R0 = num_for_xor_digits
-  srl  1                              # R0 = (num_for_xor_digits >> 1)
-  set  R5                             # R5 = num_for_xor_digits = (num_for_xor_digits >> 1)
-  seti  2                              # R0 = 2
-  eq   R6                             # R0 = (R0 == R6) = (ones == 2)
-  # br   loop_xor_digits_p1_set_ones    # if ones == 2, ones = 0
-  # j    loop_xor_digits_p1             # loop
+  seti	0b0000_1111	# R0 = 0b0000_1111
+  set	R13	# R13 = curr_5bit2 = 0b1111
+  la	R13	# R0 = 0b1111
+  srr	R10	# R0 = 0b1111 >> j
+  set	R13	# R13 = 0b1111 >> j
+  seti	4	# R0 = 4
+  add	R10	# R0 = j + 4
+  set	R14	# R14 = j + 4
+  la	R13	# R0 = curr_5bit2
+  slr	R14	# R0 = curr_5bit2 << j + 4
+  and	R8	# R0 = curr_5bit2 << j + 4 & mem_i1
+  srr	R14	# R0 = ((curr_5bit2 << j + 4) & mem_i1) >> j + 4
+  set	R13	# R13 = curr_5bit2
 
-loop_xor_digits_p1_set_ones:
-  seti 0                              # R0 = 0
-  set  R6                             # R6 = ones = 0
-  # j    loop_xor_digits_p1             # loop
+  la	R12	# R0 = curr_5bit1
+  add	R13	# R0 = curr_5bit1 + curr_5bit2
+  set	R13	# R13 = curr_5bit = curr_5bit1 + curr_5bit2
 
-loop_overall_prepare:
-  seti 2                              # R0 = 2 = 8’b00000010
-  and  R4                             # R0 = R0&R4 = mem[index+1] & 8’b00000010 (parity_check)
-  srl  1                              # R0 = (parity_check >> 1)
-  xor  R6                             # R0 = parity_check = R0 ^ R6 = ones ^ parity_check
-  add  R10                            # R0 = R0 + R10 = parity_affected + parity_check
-  set  R10                            # R10 = parity_affected = R0
+  luta	29	# R0 = LUT[29] = address of LOOP2_J_loopB
+  j	R0
 
-  seti 14                             # R0 = 14 = 8’b00001110
-  sll  4                              # R0 = 8’b11100000
-  and  R3                             # R0 = R0 & R3 = mem[index] & 8’b11100000
-  srl  5                              # R0 = (mem[index] & 8’b11100000) >> 5
-  set  R8                             # R8 = (mem[index] & 8’b11100000) >> 5 (mem_index)
+LOOP2_J_loopInByte:
+  seti	0b0001_1111	# R0 = 0b0001_1111
+  set	R13	# R13 = 0b11111
+  la	R10	# R0 = j
+  subi	4 	# R0 = j - 4
+  set	R14	# R14 = shifting number = j - 4
+  la	R13	# R0 = R13
+  slr	R14	# R0 = R0 << R15 = 0b11111 << (j - 4)
+  and	R7	# R0 = R0 & R7 = curr_5bit & mem_i = curr_5bit
+  srr	R14	# R0 = curr_5bit >> (j - 4)
+  set	R13	# R13 = curr_5bit
 
-  seti 14                             # R0 = 14 = 8’b00001110
-  sll  4                              # R0 = 8’b11100000
-  set  R9                             # R9 = R0 = 8’b11100000
-  seti 8                              # R0 = 8 = 8’b00001000
-  add  R9                             # R0 = R0 + R9 = 8’b11101000
-  and  R4                             # R0 = R0 & R4 = 8’b11101000 & mem[index + 1]
-  srl  3                              # R0 = (mem[index + 1] & 8’b11101000) >> 3
-  set  R9                             # R9 = (mem[index + 1] & 8’b11101000) >> 3 (mem_index1)
-  seti 1                              # R0 = 1
-  and  R9                             # R0 = mem_index1 & 1
-  set  R11                            # R11 = R0 (temp)
-  la   R9                             # R0 = R9
-  srl  1                              # R0 >>= 1
-  add  R11                            # R0 = R0 + R11
-  set  R9                             # R9 = mem_index1 -> 0 0 0 0 b4 b3 b2 b1
-  seti 30                             # R0 = 30 = 8’b00011110
-  and  R3                             # R0 = R0 & R3 = 8’b00011110 & mem[index]
-  sll  3                              # R0 <<= 3
-  add  R9                             # R0 = R0 + R9 -> b8 b7 b6 b5 b4 b3 b2 b1
-  set  R9                             # R9 -> b8 b7 b6 b5 b4 b3 b2 b1
+LOOP2_J_loopB:
+  la	R2	# R0 = R2 = pattern
+  eq	R13	# R0 = pattern == curr_5bit
+  set	R5	# R5 = R0
+  la	R3	# R0 = R3 = mem_35
+  add	R5	# R0 = mem_35 + (pattern == curr_5bit)
+  set	R3	# R3 = R0 (mem_35)
 
-  seti 1                              # R0 = 1
-  eq   R7                             # R0 = (R7 == R0) = (one_error_sign == 1)
-  # br   loop_overall_one_error         # one_error_sign == 1, go to loop_overall_one_error
-  # j    loop_overall_not_one_error     # 0 or 2 errors, go to loop_overall_not_one_error
+  luta	30	# R0 = LUT[30] = address of LOOP2_part_b
+  set	R5	# R5 = R0
+  seti	0	# R0 = 0
+  eq	R10	# R0 = R10 == 0 = j == 0
+  br	R5	# go out of the j loop
 
-loop_overall_one_error:
-  seti 4                              # R0 = 4 = 8’b00000100
-  sll  4                              # R0 = 8’b01000000
-  add  R8                             # R0 = R0 + R8 = 8’b01000000 + mem_index
-  set  R8                             # R8 = mem_index = R0
+  la	R10	# R0 = j
+  subi	1	# R0 = j - 1
+  set	R10	# R10 = j = j - 1
+  luta	27	# R0 = LUT[27] = address of LOOP2_J_loopA
+  j	R0
 
-  seti 3                              # R0 = 3 = 8’b00000011
-  eq   R10                            # R0 = (R0 == R10) = (parity_affected == 8’b00000011)
-  # br   loop_overall_one_error_b1      # R0 = 1, b1 error
+LOOP2_part_b:
+  luta	26	# R0 = LUT[26] = address of LOOP2_part_a
+  set	R5	# R5 = R0
+  la	R1	# R0 = R1 (i)
+  addi	1	# R0 = i + 1 = new i
+  set	R1	# R1 = R0 = new i
+  slt	R6	# R0 = R0 < R6 = new i < 32
+  br	R5	# go to LOOP2_part_a
 
-  seti 5                              # R0 = 5 = 8’b00000101
-  eq   R10                            # R0 = (R0 == R10) = (parity_affected == 8’b00000101)
-  # br   loop_overall_one_error_b2      # R0 = 1, b2 error
+after_LOOP2:
+  luta	3	# R0 = LUT[3] = 35
+  set	R1	# R1 = 35
+  la	R3	# la mem_35 to R0
+  sw	R1 	# mem[R1] = R0, mem[35] = mem_35
 
-  seti 6                              # R0 = 6 = 8’b00000110
-  eq   R10                            # R0 = (R0 == R10) = (parity_affected == 8’b00000110)
-  # br   loop_overall_one_error_b3      # R0 = 1, b3 error
-
-  seti 7                              # R0 = 7 = 8’b00000111
-  eq   R10                            # R0 = (R0 == R10) = (parity_affected == 8’b00000111)
-  # br   loop_overall_one_error_b4      # R0 = 1, b4 error
-
-  seti 9                              # R0 = 9 = 8’b00001001
-  eq   R10                            # R0 = (R0 == R10) = (parity_affected == 8’b00001001)
-  # br   loop_overall_one_error_b5      # R0 = 1, b5 error
-
-  seti 10                             # R0 = 10 = 8’b00001010
-  eq   R10                            # R0 = (R0 == R10) = (parity_affected == 8’b00001010)
-  # br   loop_overall_one_error_b6      # R0 = 1, b6 error
-
-  seti 11                             # R0 = 11 = 8’b00001011
-  eq   R10                            # R0 = (R0 == R10) = (parity_affected == 8’b00001011)
-  # br   loop_overall_one_error_b7      # R0 = 1, b7 error
-
-  seti 12                             # R0 = 12 = 8’b00001100
-  eq   R10                            # R0 = (R0 == R10) = (parity_affected == 8’b00001100)
-  # br   loop_overall_one_error_b8      # R0 = 1, b8 error
-
-  seti 13                             # R0 = 13 = 8’b00001101
-  eq   R10                            # R0 = (R0 == R10) = (parity_affected == 8’b00001101)
-  # br   loop_overall_one_error_b9      # R0 = 1, b9 error
-
-  seti 14                             # R0 = 14 = 8’b00001110
-  eq   R10                            # R0 = (R0 == R10) = (parity_affected == 8’b00001110)
-  # br   loop_overall_one_error_b10     # R0 = 1, b10 error
-
-  seti 15                             # R0 = 15 = 8’b00001111
-  eq   R10                            # R0 = (R0 == R10) = (parity_affected == 8’b00001111)
-  # br   loop_overall_one_error_b11     # R0 = 1, b11 error
-
-loop_overall_one_error_b1:
-  seti 1                              # R0 = 1 = 8’b00000001
-  xor  R9                             # R0 = R0 ^ R9 = 8’b00000001 ^ mem_index1
-  set  R9                             # R9 = mem_index1 = mem_index1 ^ 8’b00000001
-  # j    loop_overall_end
-
-loop_overall_one_error_b2:
-  seti 2                              # R0 = 2 = 8’b00000010
-  xor  R9                             # R0 = R0 ^ R9 = 8’b00000010 ^ mem_index1
-  set  R9                             # R9 = mem_index1 = mem_index1 ^ 8’b00000010
-  # j    loop_overall_end
-
-loop_overall_one_error_b3:
-  seti 4                              # R0 = 4 = 8’b00000100
-  xor  R9                             # R0 = R0 ^ R9 = 8’b00000100 ^ mem_index1
-  set  R9                             # R9 = mem_index1 = mem_index1 ^ 8’b00000100
-  # j    loop_overall_end
-
-loop_overall_one_error_b4:
-  seti 8                              # R0 = 8 = 8’b00001000
-  xor  R9                             # R0 = R0 ^ R9 = 8’b00001000 ^ mem_index1
-  set  R9                             # R9 = mem_index1 = mem_index1 ^ 8’b00001000
-  # j    loop_overall_end
-
-loop_overall_one_error_b5:
-  seti 16                             # R0 = 16 = 8’b00010000
-  xor  R9                             # R0 = R0 ^ R9 = 8’b00010000 ^ mem_index1
-  set  R9                             # R9 = mem_index1 = mem_index1 ^ 8’b00010000
-  # j    loop_overall_end
-
-loop_overall_one_error_b6:
-  seti 2                              # R0 = 2 = 8’b00000010
-  sll  4                              # R0 = 8’b00100000
-  xor  R9                             # R0 = R0 ^ R9 = 8’b00100000 ^ mem_index1
-  set  R9                             # R9 = mem_index1 = mem_index1 ^ 8’b00100000
-  # j    loop_overall_end
-
-loop_overall_one_error_b7:
-  seti 4                              # R0 = 2 = 8’b00000100
-  sll  4                              # R0 = 8’b01000000
-  xor  R9                             # R0 = R0 ^ R9 = 8’b01000000 ^ mem_index1
-  set  R9                             # R9 = mem_index1 = mem_index1 ^ 8’b01000000
-  # j    loop_overall_end
-
-loop_overall_one_error_b8:
-  seti 8                              # R0 = 8 = 8’b00001000
-  sll  4                              # R0 = 8’b10000000
-  xor  R9                             # R0 = R0 ^ R9 = 8’b10000000 ^ mem_index1
-  set  R9                             # R9 = mem_index1 = mem_index1 ^ 8’b10000000
-  # j    loop_overall_end
-
-loop_overall_one_error_b9:
-  seti 1                              # R0 = 1 = 8’b00000001
-  xor  R8                             # R0 = R0 ^ R8 = 8’b00000001 ^ mem_index
-  set  R8                             # R8 = mem_index = mem_index ^ 8’b00000001
-  # j    loop_overall_end
-
-loop_overall_one_error_b10:
-  seti 2                              # R0 = 2 = 8’b00000010
-  xor  R8                             # R0 = R0 ^ R8 = 8’b00000010 ^ mem_index
-  set  R8                             # R8 = mem_index = mem_index ^ 8’b00000010
-  # j    loop_overall_end
-
-loop_overall_one_error_b11:
-  seti 4                              # R0 = 4 = 8’b00000100
-  xor  R8                             # R0 = R0 ^ R8 = 8’b00000100 ^ mem_index
-  set  R8                             # R8 = mem_index = mem_index ^ 8’b00000100
-  # j    loop_overall_end
-
-loop_overall_not_one_error:
-  eq   R10                            # R0 = (R0 == R10) = (parity_affected == 0)
-  # br   loop_overall_end               # if parity_affected == 0, no error
-  seti 8                              # R0 = 8 = 8’b00001000
-  sll  4                              # R0 = 8’b10000000
-  add  R8                             # R0 = R0 + R8 = mem_index + 8’b10000000
-  set  R8                             # R8 = mem_index = mem_index + 8’b10000000
-
-loop_overall_end:
-  seti 30                             # R0 = 30
-  set  R11                            # R11 = 30
-  la   R1                             # R0 = R1 = index
-  sub  R11                            # R0 = R0 - R11 = index - 30
-  set  R11                            # R11 = R0 = index - 30
-  la   R8                             # R0 = R8 = mem_index
-  sw   R11                            # mem[R11] = R0, mem[index - 30] = mem_index
-
-  seti 29                             # R0 = 29
-  set  R11                            # R11 = 29
-  la   R1                             # R0 = index
-  sub  R11                            # R0 = R0 - R11 = index - 29
-  set  R11                            # R11 = R0 = index - 29
-  la   R9                             # R0 = R9 = mem_index1
-  sw   R11                            # mem[R11] = R0, mem[index - 29] = mem_index1
-
-  seti 2                              # R0 = 2
-  add  R1                             # R0 = R0 + R1 = index + 2
-  set  R1                             # R1 = index = index + 2
-  
-  # j    loop_overall_start             # loop
-
-loop_done:
-  halt                                # terminate the program
+  halt	# terminate
