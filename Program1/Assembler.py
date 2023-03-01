@@ -69,7 +69,9 @@ with open('assembly.txt', 'r') as inFile:
 with open('mach_code.txt', 'w') as outFile:
     assemblyCode = assemblyCode.split('\n')     # SPlit the assembly code into separate lines
     lineCount = len(assemblyCode)
+
     # branch_name = None
+    # PC_address = -1
     
     for i in range(lineCount):
         # print(assemblyCode[i])    # DELETE: for debug
@@ -80,9 +82,11 @@ with open('mach_code.txt', 'w') as outFile:
         # Skip comments and empty lines
         if len(instr) == 0:
             continue
-        elif instr == '\n' or instr[0] == '#':
+        elif instr == '\n' or instr[0][0] == '#':
             continue
             
+        # PC_address += 1
+        
         # Handle HALT and branch definition
         if instr[0].lower() == 'halt':
             machineCode = iType + '00000' + opHALT + '\n'
@@ -91,9 +95,10 @@ with open('mach_code.txt', 'w') as outFile:
         
         if instr[0][-1] == ':':
             # branch_name = instr[0][:-1]
+            # PC_address -= 1
             continue
         # if branch_name != None:
-            # print(i, branch_name, instr)
+            # print(PC_address, branch_name, assemblyCode[i])
             # branch_name = None
         
         # print(instr)    # DELETE: for debug
