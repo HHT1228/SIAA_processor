@@ -18,7 +18,7 @@ LOOP:
 	set	R2	# R2 = mem[i] = LSW
 	seti	1	# R0 = 1
 	add 	R1	# R0 = i + 1
-	lw 	R1	# R1 = mem[i + 1]
+	lw 	R0	# R0 = mem[i + 1]
 	set 	R3	# R3 = mem[i + 1] = MSW
 
 	# Constant set
@@ -28,11 +28,11 @@ LOOP:
 	set	R9	# R9 = 30
 
 	# Loop condition modify
-	seti	2	# R0 = 2
-	set	R6	# R6 = 2
-	la	R1	# R0 = R1
-	add	R6	# R0 = R0 + R6
-	set	R1	# R1 = R0	(equivalent to R1 += 2)
+	#seti	2	# R0 = 2
+	#set	R6	# R6 = 2
+	#la	R1	# R0 = R1
+	#add	R6	# R0 = R0 + R6
+	#set	R1	# R1 = R0	(equivalent to R1 += 2)
 	
 	# Calculate p8 MSW part (11, 10, 9)
 	rxor	R3	# R0 = ^R3 = ^MSW
@@ -151,6 +151,13 @@ LOOP:
 	or	R11	# R0 = R0 | R11	(newLSW | (p1 << 1))
 	or	R10	# R0	= R0 | R10 (newLSW | p0)
 	sw	R13	# datamem[30 + i] = R0
+
+	# Loop condition modify
+	seti	2	# R0 = 2
+	set	R6	# R6 = 2
+	la	R1	# R0 = R1
+	add	R6	# R0 = R0 + R6
+	set	R1	# R1 = R0	(equivalent to R1 += 2)
 
 	# Loop condition check
 	luta	16	# R0 = LUT[16] = address of LOOP flag

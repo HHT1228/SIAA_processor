@@ -1,6 +1,6 @@
 // Lookup table
 module LUT (
-  input        [4:0] key,
+  input        [7:0] key,
   
   output logic [7:0] LUTaddr // Target address
   );
@@ -26,21 +26,21 @@ module LUT (
       15: LUTaddr = 8'b11111110;
 
       // branch addresses
-      16: LUTaddr = 2 // Program 1: LOOP
-      17: LUTaddr = 4 // Program 2: loop_start
-      18: LUTaddr = 104 // Program 2: loop_one_error
-      19: LUTaddr = 137 // Program 2: loop_error_b1
-      20: LUTaddr = 141 // Program 2: loop_error_b234
-      21: LUTaddr = 145 // Program 2: loop_error_b5678
-      22: LUTaddr = 147 // Program 2: loop_error_LSW
-      23: LUTaddr = 154 // Program 2: loop_end
-      24: LUTaddr = 9 // Program 3: LOOP1_part_a
-      25: LUTaddr = 17 // Program 3: LOOP1_J_loop
-      26: LUTaddr = 58 // Program 3: LOOP2_part_a
-      27: LUTaddr = 68 // Program 3: LOOP2_J_loopA
-      28: LUTaddr = 110 // Program 3: LOOP2_J_loopInByte
-      29: LUTaddr = 120 // Program 3: LOOP2_J_loopB
-      30: LUTaddr = 136 // Program 3: LOOP2_part_b
+      16: LUTaddr = 2; // Program 1: LOOP
+      17: LUTaddr = 4; // Program 2: loop_start
+      18: LUTaddr = 104; // Program 2: loop_one_error
+      19: LUTaddr = 137; // Program 2: loop_error_b1
+      20: LUTaddr = 141; // Program 2: loop_error_b234
+      21: LUTaddr = 145; // Program 2: loop_error_b5678
+      22: LUTaddr = 147; // Program 2: loop_error_LSW
+      23: LUTaddr = 154; // Program 2: loop_end
+      24: LUTaddr = 9; // Program 3: LOOP1_part_a
+      25: LUTaddr = 17; // Program 3: LOOP1_J_loop
+      26: LUTaddr = 58; // Program 3: LOOP2_part_a
+      27: LUTaddr = 68; // Program 3: LOOP2_J_loopA
+      28: LUTaddr = 110; // Program 3: LOOP2_J_loopInByte
+      29: LUTaddr = 120; // Program 3: LOOP2_J_loopB
+      30: LUTaddr = 136; // Program 3: LOOP2_part_b
 
       default: LUTaddr = 0;
     endcase
