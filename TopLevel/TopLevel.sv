@@ -101,6 +101,6 @@ module TopLevel #(parameter D = 12)(
 	assign	wbMUX = memToReg? readData : result;
 	assign	lutMUX = LUTSet? LUTaddr : wbMUX;
 //	assign 	pcTarget = pcBranch? PC : opRegData;
-	assign done = PC == 128;
+	assign done = PC == 255;
 				
 endmodule

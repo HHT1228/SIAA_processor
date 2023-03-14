@@ -144,12 +144,26 @@ loop_one_error:
   luta	4	# R0 = LUT[4] = 0b0100_0000
   add	R9	# R0 += R9 (MSW_new)
   set	R9	# R9 = R0
-    
+  
+  luta	23	# R0 = LUT[23] = address of loop_end
+  set	R5	# R5 = R0
+  seti	0b0000_0011	# R0 = 0b0000_0011
+  set	R11	# R11 = R0 (temp)
+  la	R10	# R0 = R10 = parity_affected
+  slt	R11	# R0 = R10 < R11 (p0, p1, or p2 error)
+  br	R5	# R0 = 1, p0, p1, or p2 error
+
   luta	19	# R0 = LUT[19] = address of loop_error_b1
   set	R5	# R5 = R0
   seti	0b0000_0011	# R0 = 0b0000_0011
   eq	R10	# R0 = (R0 == R10) = (parity_affected == 0b0000_0011)
   br	R5	# R0 = 1, b1 error
+
+  luta	23	# R0 = LUT[23] = address of loop_end
+  set	R5	# R5 = R0
+  seti	0b0000_0100	# R0 = 0b0000_0100
+  eq	R10	# R0 = (R0 == R10) = (parity_affected == 0b0000_0100)
+  br	R5	# R0 = 1, p4 error
 
   luta	20	# R0 = LUT[20] = address of loop_error_b234
   set	R5	# R5 = R0
@@ -158,6 +172,12 @@ loop_one_error:
   la	R10	# R0 = R10 = parity_affected
   slt	R11	# R0 = R10 < R11 (b2, b3, or b4 error)
   br	R5	# R0 = 1, b2, b3, or b4 error
+
+  luta	23	# R0 = LUT[23] = address of loop_end
+  set	R5	# R5 = R0
+  seti	0b0000_1000	# R0 = 0b0000_1000
+  eq	R10	# R0 = (R0 == R10) = (parity_affected == 0b0000_1000)
+  br	R5	# R0 = 1, p8 error
 
   luta	21	# R0 = LUT[21] = address of loop_error_b5678
   set	R5	# R5 = R0

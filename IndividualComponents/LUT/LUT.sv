@@ -29,11 +29,11 @@ module LUT (
       16: LUTaddr = 2; // Program 1: LOOP
       17: LUTaddr = 4; // Program 2: loop_start
       18: LUTaddr = 104; // Program 2: loop_one_error
-      19: LUTaddr = 137; // Program 2: loop_error_b1
-      20: LUTaddr = 141; // Program 2: loop_error_b234
-      21: LUTaddr = 145; // Program 2: loop_error_b5678
-      22: LUTaddr = 147; // Program 2: loop_error_LSW
-      23: LUTaddr = 154; // Program 2: loop_end
+      19: LUTaddr = 154; // Program 2: loop_error_b1
+      20: LUTaddr = 158; // Program 2: loop_error_b234
+      21: LUTaddr = 162; // Program 2: loop_error_b5678
+      22: LUTaddr = 164; // Program 2: loop_error_LSW
+      23: LUTaddr = 171; // Program 2: loop_end
       24: LUTaddr = 9; // Program 3: LOOP1_part_a
       25: LUTaddr = 17; // Program 3: LOOP1_J_loop
       26: LUTaddr = 58; // Program 3: LOOP2_part_a
