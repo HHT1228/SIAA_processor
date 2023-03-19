@@ -101,6 +101,8 @@ LOOP2_part_a:
   seti	0	# R0 = 0
   set	R11	# R11 = 0 (loop boundary j)
 
+  # mem j index: 7 6 5 4 3 2 1 0
+
 LOOP2_J_loopA:
   luta	28	# R0 = LUT[28] = address of LOOP2_J_loopInByte
   set	R5	# R5 = R0
@@ -114,34 +116,27 @@ LOOP2_J_loopA:
   eq	R1	# R0 = (i == 31)
   br	R5	# no more, jump out of the j loop
 
-  seti	0b0000_1111	# R0 = 0b0000_1111
-  set	R12	# R12 = curr_5bit1 = 0b1111
-  seti	3	# R0 = 3
-  sub	R10	# R0 = 3 - j
-  set	R14	# R14 = shifting number = 3 - j
-  la	R12	# R0 = 0b1111
-  srr	R14	# R0 = 0b1111 >> 3 - j
+  seti	0b0001_1111	# R0 = 0b0001_1111
+  set	R12	# R12 = curr_5bit1 = 0b11111
+  seti	4	# R0 = 4
+  sub	R10	# R0 = 4 - j
+  set	R14	# R14 = shifting number = 4 - j
+  la	R12	# R0 = 0b11111
+  srr	R14	# R0 = 0b11111 >> 4 - j
   and	R7	# R0 = R0 & mem_i
-  set	R12	# R12 = curr_5bit1 = (0b1111 >> 3 - j) & mem_i
-  seti	1	# R0 = 1
-  add	R14	# R14 = 4 - j
-  la	R12	# R0 = curr_5bit1
-  slr	R14	# R0 = curr_5bit1 << 4 - j
-  set	R12	# R12 = curr_5bit1
+  slr	R14	# R0 = R0 << 4 - j
+  set	R12	# R12 = curr_5bit1 = R0
 
-  seti	0b0000_1111	# R0 = 0b0000_1111
-  set	R13	# R13 = curr_5bit2 = 0b1111
-  la	R13	# R0 = 0b1111
-  srr	R10	# R0 = 0b1111 >> j
-  set	R13	# R13 = 0b1111 >> j
+  seti	0b0001_1111	# R0 = 0b0001_1111
+  set	R13	# R13 = curr_5bit2 = 0b11111
   seti	4	# R0 = 4
   add	R10	# R0 = j + 4
-  set	R14	# R14 = j + 4
-  la	R13	# R0 = curr_5bit2
-  slr	R14	# R0 = curr_5bit2 << j + 4
-  and	R8	# R0 = curr_5bit2 << j + 4 & mem_i1
-  srr	R14	# R0 = ((curr_5bit2 << j + 4) & mem_i1) >> j + 4
-  set	R13	# R13 = curr_5bit2
+  set	R14	# R14 = shifting number = j + 4
+  la	R13	# R0 = 0b11111
+  slr	R14	# R0 = 0b11111 << j + 4
+  and	R8	# R0 = R0 & mem_i1
+  srr	R14	# R0 = R0 >> j + 4
+  set	R13	# R13 = curr_5bit2 = R0
 
   la	R12	# R0 = curr_5bit1
   add	R13	# R0 = curr_5bit1 + curr_5bit2

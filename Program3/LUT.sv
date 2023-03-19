@@ -38,9 +38,9 @@ module LUT (
       25: LUTaddr = 17; // Program 3: LOOP1_J_loop
       26: LUTaddr = 58; // Program 3: LOOP2_part_a
       27: LUTaddr = 68; // Program 3: LOOP2_J_loopA
-      28: LUTaddr = 110; // Program 3: LOOP2_J_loopInByte
-      29: LUTaddr = 120; // Program 3: LOOP2_J_loopB
-      30: LUTaddr = 136; // Program 3: LOOP2_part_b
+      28: LUTaddr = 103; // Program 3: LOOP2_J_loopInByte
+      29: LUTaddr = 113; // Program 3: LOOP2_J_loopB
+      30: LUTaddr = 129; // Program 3: LOOP2_part_b
 
       default: LUTaddr = 0;
     endcase
