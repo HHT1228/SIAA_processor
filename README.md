@@ -25,7 +25,7 @@
 - Make sure you have all the design files, one of the test benches, and the machine code for the program same as that for the test bench ready in one folder
 - `File` ->  `New` -> `Project`
 - `Project Location` -> `Browse` -> Choose the folder with all files and codes ready
-- `Add Existing File` -> Select all the `.sv` files in the program folder
+- `Add Existing File` -> Select all the `.sv` files in the folder
 - `Compile` -> `Compile All`
 - `Simulate` -> `Start Simulation`
 - `work` -> choose the test bench with suffix `_tb`
