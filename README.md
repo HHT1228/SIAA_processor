@@ -1,30 +1,34 @@
 # SIAA_processor
 
+## Codes
+
+### Design Files
+- `TopLevel.sv`: Top Level module file
 - `alu.sv`: ALU module file
-- `alu_tb.sv`: ALU testbench file
 - `CtrlDecoder.sv`: Control Decoder module file
 - `dataMem.sv`: Data Memory module file
 - `InstrROM.sv`: Instruction Memory module file
 - `LUT.sv`: Lookup Table module file
-- `mach_code.txt`: Dummy machine code instructions for compilation
 - `MUX.sv`: MUX module file
 - `PC.sv`: Program Counter module file
-- `PC_tb.sv`: Program Counter testbench file
 - `regFile.sv`: Register File module file
-- `TopLevel.sv`: Top Level module file
+
+### Other Codes
 - `Assembler.py`: Assembler program that translates assembly instructions into binary machine codes
-- `Program1`, `Program2`, and `Program3`: Assembly and machine codes for the three programs
+- `Program1`, `Program2`, and `Program3`: Folders containing assembly and machine codes for the three programs
+- `prog1_tb.sv`, `prog2_tb.sv`, `prog2_tb_one_error.sv`, `prog3_tb.sv`: Test benches for the three programs
+  - `prog2_tb_one_error.sv`: the modified test bench for Program 2 based on `prog2_tb.sv`, generating one-bit error cases only
 
 ## How to Run the Code
 - Download the code
 - Download and open ModelSim
-- Make sure you have all the hardware design files, top-level design file, and the machine code ready.
+- Make sure you have all the design files, one of the test benches, and the machine code for the program same as that for the test bench ready in one folder
 - `File` ->  `New` -> `Project`
-- `Project Location` -> `Browse` -> Choose one of the three program folders (ex. `Program1`)
+- `Project Location` -> `Browse` -> Choose the folder with all files and codes ready
 - `Add Existing File` -> Select all the `.sv` files in the program folder
-- `Compile` -> `Compile All` (You can change the compile order if you want)
+- `Compile` -> `Compile All`
 - `Simulate` -> `Start Simulation`
-- `work` -> choose the test bench (ex. `prog1_tb`)
+- `work` -> choose the test bench with suffix `_tb`
 - `Simulate` -> `Run` -> `Run -All`
 - If instruction fetch fails, try use the absolute file path in `InstrROM.sv`
 
@@ -35,7 +39,7 @@
 - `prog2_tb.sv` as the test bench
   - Score when `flip[i] = $random;` and `flip2[i] = $random;`: 15 out of 15
   - Score when `flip[i] = 'b1000;` and `flip2[i] = 'b0;`: 15 out of 15
-- `prog2_tb_one_error.sv` as the test bench (generating 15 one-bit error cases)
+- `prog2_tb_one_error.sv` as the test bench
   - Score when `flip[i] = $random;`: 15 out of 15
   - Score when `flip[i] = 'b1000;`: 15 out of 15
 ### Program 3
