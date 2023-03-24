@@ -18,6 +18,7 @@
 ## How to Run the Code
 - Download the code
 - Download and open ModelSim
+- Make sure you have all the hardware design files, top-level design file, and the machine code ready.
 - `File` ->  `New` -> `Project`
 - `Project Location` -> `Browse` -> Choose one of the three program folders (ex. `Program1`)
 - `Add Existing File` -> Select all the `.sv` files in the program folder
@@ -25,6 +26,7 @@
 - `Simulate` -> `Start Simulation`
 - `work` -> choose the test bench (ex. `prog1_tb`)
 - `Simulate` -> `Run` -> `Run -All`
+- If instruction fetch fails, try use the absolute file path in `InstrROM.sv`
 
 ## What Worked
 ### Program 1
